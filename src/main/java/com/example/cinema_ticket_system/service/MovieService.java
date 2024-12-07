@@ -3,17 +3,21 @@ package com.example.cinema_ticket_system.service;
 import com.example.cinema_ticket_system.dto.MovieDto;
 import com.example.cinema_ticket_system.entities.Movie;
 import com.example.cinema_ticket_system.repository.MovieRepo;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class MovieService {
 
     private final MovieRepo movieRepo;
+
+    @Autowired
+    public MovieService(MovieRepo movieRepo) {
+        this.movieRepo = movieRepo;
+    }
 
     public String addMovie(Movie movie) {
         Movie myMovie = movieRepo.findByMoviename(movie.getMoviename());
@@ -37,7 +41,6 @@ public class MovieService {
         return "Movie added successfully";
     }
     public List<MovieDto> getAllMovies() {
-        List<Movie> movies = movieRepo.findAll();
         return movieRepo.findAll().stream().map(movie ->
              new MovieDto(
                      movie.getMoviename(),
